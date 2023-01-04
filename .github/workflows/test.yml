@@ -7,7 +7,7 @@ jobs:
       - name: Get the code (as we do not have it by defult)
         uses: actions/checkout@v3
       - name: Install Node (not mandatory as ubuntu has it preinstalled, but let's install more modern version)
-        uses: actions: actions/setup-node@v3
+        uses: actions/setup-node@v3
         with:
           node-version: 18
       - name: Install dependencies
