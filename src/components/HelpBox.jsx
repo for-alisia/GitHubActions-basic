@@ -1,3 +1,4 @@
+import React from 'react';
 import './HelpBox.css';
 
 function HelpBox({ title, text }) {
