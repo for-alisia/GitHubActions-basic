@@ -1,0 +1,30 @@
+name: Test project
+on: push
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the code (as we do not have it by defult)
+        uses: actions/checkout@v3
+      - name: Install Node (not mandatory as ubuntu has it preinstalled, but let's install more modern version)
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install dependencies
+        run: npm ci
+      - name: Run unit tests
+        run: npm test
+  deploy:
+    runs-on: ubuntu-latest
+      - name: Get the code (as we do not have it by defult)
+        uses: actions/checkout@v3
+      - name: Install Node (not mandatory as ubuntu has it preinstalled, but let's install more modern version)
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install dependencies 
+        run: npm ci
+      - name: build
+        run: npm run build
+      - name: Deploy
+        run: echo "Deploying..."   
