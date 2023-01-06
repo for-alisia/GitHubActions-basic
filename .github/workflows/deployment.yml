@@ -1,5 +1,17 @@
 name: Lint, test and delpoy a project
-on: [push, workflow_dispatch]
+on: 
+  pull_request:
+    types: [opened, edited, reopened]
+    branches:
+      - main
+  push:
+    branches:
+      - main
+      - 'dev-*' # dev-new (with * / is not allowed)
+      - 'feature/**' # feature/11/new, feature/11 (** means we can have / there)
+    paths-ignore: 
+      - '.github/workflows/*' # will trigger pipeline only if there are other changes then workflow changes
+  workflow_dispatch:
 jobs:
   lint:
     runs-on: ubuntu-latest
