@@ -7,7 +7,7 @@ The project is minimal React app with couple of tests included to be able to run
 git commit -m "My commit [skip ci]"
 ```
 
-- To pass several paths to upload-artifact action
+- To pass several paths to upload-artifact action:
 ```
 - name: Upload artifact
         uses: actions/upload-artifact@v3

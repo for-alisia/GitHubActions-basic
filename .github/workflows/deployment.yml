@@ -22,6 +22,11 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: deps-mode-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
         run: npm ci
       - name: Run linting
@@ -36,6 +41,11 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: deps-mode-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
         run: npm ci
       - name: Run unit tests
@@ -52,6 +62,11 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: deps-mode-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
         run: npm ci
       - name: Build the project
