@@ -86,7 +86,14 @@ jobs:
         run: echo "${{ needs.build.outputs.script-js }}"
       - name: Deploy
         run: |
-          echo "Deploying ......."  
+          echo "Deploying ......." 
+  reusable-deploy:
+    needs: build
+    uses: ./.github/workflow/reusable.yml
+    with:
+      artifact-name: dist-files
+    secrets:
+      some-secret: ${{ secret.DEMO_SECRET }}
   report:
     needs: [build, lint]
     if: failure() 
