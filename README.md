@@ -17,3 +17,5 @@ git commit -m "My commit [skip ci]"
             dist
             package.json 
 ```
+
+- Confitional jobs: we can use both syntaxes ${{ someVar }} or someVar
