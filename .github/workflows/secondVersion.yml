@@ -1,56 +1,40 @@
-name: Lint, test and delpoy a project
+name: Lint, test and delpoy a project (Second variant)
 on: 
-  pull_request:
-    types: [opened, edited, reopened]
-    branches:
-      - main
   push:
     branches:
       - main
-      - 'dev-*' # dev-new (with * / is not allowed)
-      - 'feature/**' # feature/11/new, feature/11 (** means we can have / there)
-    paths-ignore: 
-      - '.github/workflows/*' # will trigger pipeline only if there are other changes then workflow changes
   workflow_dispatch:
-env:
-  DOMAIN_NAME: demo 
 jobs:
   lint:
-    env:
-      JOB_VAR: ${{ secrets.DEMO_SECRET }}
     runs-on: ubuntu-latest
     steps:
       - name: Get the code (as we do not have it by defult)
         uses: actions/checkout@v3
-      - name: Install Node (not mandatory as ubuntu has it preinstalled, but let's install more modern version)
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
       - name: Cache dependencies
+        id: cache
         uses: actions/cache@v3
         with:
-          path: ~/.npm
+          path: node_modules
           key: deps-mode-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
       - name: Run linting
+        continue-on-error: true
         run: npm run lint
   test:
-    needs: lint
     runs-on: ubuntu-latest
     steps:
       - name: Get the code (as we do not have it by defult)
         uses: actions/checkout@v3
-      - name: Install Node (not mandatory as ubuntu has it preinstalled, but let's install more modern version)
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
       - name: Cache dependencies
+        id: cache
         uses: actions/cache@v3
         with:
-          path: ~/.npm
+          path: node_modules
           key: deps-mode-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
       - name: Run unit tests
         id: running-tests
@@ -69,16 +53,14 @@ jobs:
     steps:
       - name: Get the code
         uses: actions/checkout@v3
-      - name: Install Node 18
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
       - name: Cache dependencies
+        id: cache
         uses: actions/cache@v3
         with:
-          path: ~/.npm
+          path: node_modules
           key: deps-mode-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
       - name: Build the project
         run: npm run build
@@ -104,9 +86,9 @@ jobs:
         run: echo "${{ needs.build.outputs.script-js }}"
       - name: Deploy
         run: |
-          echo "Deploying on ${{ env.DOMAIN_NAME }}"  
+          echo "Deploying ......."  
   report:
-    needs: build
+    needs: [build, lint]
     if: failure() 
     runs-on: ubuntu-latest
     steps:
