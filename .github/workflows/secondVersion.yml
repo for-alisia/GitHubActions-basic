@@ -94,6 +94,11 @@ jobs:
       artifact-name: dist-files
     secrets:
       some-secret: ${{ secret.DEMO_SECRET }}
+  print-deploy-result:
+    needs: reusable-deploy
+    steps:
+      - name: Print deploy result
+        run: echo ${{ needs.deploy.outputs.result }}
   report:
     needs: [build, lint]
     if: failure() 
