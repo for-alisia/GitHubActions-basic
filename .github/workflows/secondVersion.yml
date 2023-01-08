@@ -89,6 +89,7 @@ jobs:
       some-secret: ${{ secrets.DEMO_SECRET }}
   print-deploy-result:
     needs: reusable-deploy
+    runs-on: ubuntu-latest
     steps:
       - name: Print deploy result
         run: echo ${{ needs.reusable-deploy.outputs.result }}
