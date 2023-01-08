@@ -89,7 +89,7 @@ jobs:
           echo "Deploying ......." 
   reusable-deploy:
     needs: build
-    uses: ./.github/workflow/reusable.yml
+    uses: ./.github/workflows/reusable.yml
     with:
       artifact-name: dist-files
     secrets:
