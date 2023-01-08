@@ -3,17 +3,12 @@ on:
   workflow_call:
     inputs:
       artifact-name: 
-        descrition: The name of artifact
         required: false
         default: dist
         type: string
     outputs:
       result:
-        description: Result of the job
         value: ${{ jobs.deploy.outcome }}
-    secrets:
-      some-secreet:
-        required: false 
 jobs:
   deploy:
     outputs:
@@ -26,7 +21,7 @@ jobs:
       - name: List the list of files
         run: ls
       - name: Output some info
-        run: echo "Deploying and uploading ${{ secrets.some-secret }}"
+        run: echo "Deploying and uploading"
       - name: Set result
         id: set-result
         run: echo "step-result=success" >> $GITHUB_OUTPUT
