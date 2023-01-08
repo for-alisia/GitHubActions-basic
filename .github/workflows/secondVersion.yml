@@ -82,6 +82,7 @@ jobs:
           echo "Deploying ......." 
   reusable-deploy:
     needs: build
+    runs-on: ubuntu-latest
     uses: ./.github/workflows/reusable.yml
     with:
       artifact-name: dist-files
