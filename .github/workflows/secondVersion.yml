@@ -69,8 +69,13 @@ jobs:
       - name: Output JS filename
         run: echo "${{ needs.build.outputs.script-js }}"
       - name: Deploy
-        run: |
-          echo "Deploying ......." 
+        uses: ./.github/actions/deployS3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        with:
+          bucket: some-aws-bucket
+          dist-folder: ./dist 
   report:
     needs: [build, lint]
     if: failure() 
@@ -80,10 +85,3 @@ jobs:
         run: |
           echo "Something went wrong"
           echo ${{ toJSON(github) }} 
-  information:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get the code
-        uses: actions/checkout@v3
-      - name: Run custom JS action
-        uses: ./.github/actions/deployS3
