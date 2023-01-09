@@ -12,6 +12,8 @@ jobs:
         uses: actions/checkout@v3
       - name: Load and cache dependencies
         uses: ./.github/actions/cachedDeps
+        with:
+          caching: 'false'
       - name: Run linting
         continue-on-error: true
         run: npm run lint
@@ -20,15 +22,8 @@ jobs:
     steps:
       - name: Get the code (as we do not have it by defult)
         uses: actions/checkout@v3
-      - name: Cache dependencies
-        id: cache
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: deps-mode-modules-${{ hashFiles('**/package-lock.json') }}
-      - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: npm ci
+      - name: Load and cache dependencies
+        uses: ./.github/actions/cachedDeps
       - name: Run unit tests
         id: running-tests
         run: npm test
@@ -46,15 +41,8 @@ jobs:
     steps:
       - name: Get the code
         uses: actions/checkout@v3
-      - name: Cache dependencies
-        id: cache
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: deps-mode-modules-${{ hashFiles('**/package-lock.json') }}
-      - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: npm ci
+      - name: Load and cache dependencies
+        uses: ./.github/actions/cachedDeps
       - name: Build the project
         run: npm run build
       - name: Publish JS filename
@@ -80,17 +68,6 @@ jobs:
       - name: Deploy
         run: |
           echo "Deploying ......." 
-  reusable-deploy:
-    needs: build
-    uses: ./.github/workflows/reusable.yml
-    with:
-      artifact-name: dist-files
-  print-deploy-result:
-    needs: reusable-deploy
-    runs-on: ubuntu-latest
-    steps:
-      - name: Print deploy result
-        run: echo ${{ needs.reusable-deploy.outputs.result }}
   report:
     needs: [build, lint]
     if: failure() 
