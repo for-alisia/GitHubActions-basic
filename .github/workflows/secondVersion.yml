@@ -77,7 +77,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         with:
           bucket: some-aws-bucket
-          dist-folder: ./dist 
+          dist-folder: ./dist-files 
   report:
     needs: [build, lint]
     if: failure() 
