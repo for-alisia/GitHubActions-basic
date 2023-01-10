@@ -72,12 +72,16 @@ jobs:
         run: echo "${{ needs.build.outputs.script-js }}"
       - name: Deploy
         uses: ./.github/actions/deployS3
+        id: aws-deploy
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         with:
           bucket: some-aws-bucket
-          dist-folder: ./dist-files 
+          dist-folder: ./dist-files
+      - name: Output URL
+        run: |
+          echo "Live url: ${{ steps.aws-deploy.outputs.website-url }}" 
   report:
     needs: [build, lint]
     if: failure() 

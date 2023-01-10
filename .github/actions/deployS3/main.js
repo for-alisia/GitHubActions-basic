@@ -10,9 +10,11 @@ function run() {
   // Upload dist folder
   const s3Uri = `s3://${bucket}`
 
-  exec.exec(`aws s3 sync ${dist} ${s3Uri} --region ${region}`)
+  exec.exec(`aws s3 sync ${dist} ${s3Uri} --region ${region}`);
 
-  core.notice('Output from JS custom action')
+  const webUrl = `http://${bucket}.s3-website-${region}.amazonaws.com`;
+
+  core.setOutput('website-url', webUrl);
 }
 
 run();
